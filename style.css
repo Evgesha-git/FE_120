@@ -1,0 +1,19 @@
+.slider_main{
+    width: 200px;
+    height: 100px;
+    /* display: flex; */
+    overflow: hidden;
+}
+
+.slider_container{
+    display: flex;
+    width: calc(calc(100px + 10px) * 20);
+}
+
+.slide{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+    background: red;
+}   
