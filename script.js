@@ -1,122 +1,67 @@
-function Note(data){
-    if (!data.title && data.title.length < 0) return;
-    this.data = data;
+function init(){
+    let textInput = document.querySelector('#title');
+    let form = document.querySelector('#form');
+    let conteiner = document.querySelector('.todoList');
+    let clear = document.querySelector('#clear');
 
-    this.edit = function(data){
-        Object.assign(this.data, data)
-    }
-}
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        let elem = createToDo(textInput.value);
+        textInput.value = '';
+        conteiner.append(elem);
+    });
 
-function NotesController(){
-    this.notes = [];
-    this.container;
-    this.id = 0;
+    clear.addEventListener('click', () => {
+        conteiner.innerHTML = '';
+    });
 
-    this.init = function(){
-        let form = document.querySelector('#form');
-        this.contaier = document.querySelector('.todoList');
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            console.log(event);
-            let inputs = form.querySelectorAll('input[type=text]');
-            let valid = false;
-            for (let i = 0; i < inputs.length; i++){
-                if (inputs[i].value.length > 0 && inputs[i].name === 'title'){
-                    valid = true;
-                }
-            }
-            if (!valid) {
-                alert('Поля пустые');
-                return;
-            }
-            // let data = [...inputs].reduce((data, item) => ({...data, [item.name]: item.value}), {});
-            let data = {};
-            for (let i = 0; i < inputs.length; i++){
-                data[inputs[i].name] = inputs[i].value;
-            }
-            this.add(data);
-            this.render();
-            [...inputs].forEach((item) => item.value = '');
-        });
-
-        let clear = document.querySelector('#clear');
-        clear.addEventListener('click', () => this.clear());
-    }
-
-    this.add = function(data){
-        let note = new Note(data);
-        let id = this.id++;
-        let complite = false;
-
-        note.edit({id: id, complite: complite});
-        this.notes.push(note);
-    }
-
-    this.render = function(){
-        this.contaier.innerHTML = '';
-
-        let notesItem = this.notes.map(item => this.createItem(item));
-        notesItem.forEach(item => this.contaier.append(item));
-    }
-
-    this.createItem = function(note){
-        let noteItem = document.createElement('div');
-        noteItem.classList.add('node-item');
-
-        let title = document.createElement('h2');
-        title.classList.add('title');
-        title.innerText = note.data.title;
-
-        let content = document.createElement('div');
-        content.classList.add('content');
-        content.innerText = note.data.content;
-        if (note.data.complite){
-            content.classList.add('complite');
+    conteiner.addEventListener('click', e => {
+        if (e.target.className === 'del-todo'){
+            e.target.parentNode.remove();
         }
+        if (e.target.className === 'edit-todo'){
+            let title = e.target.parentNode.querySelector('p');
+            title.contentEditable = true;
+        }
+    });
 
-        let removeBtn = document.createElement('button');
-        removeBtn.classList.add('remove');
-        removeBtn.innerText = 'Удалить запись';
-        removeBtn.addEventListener('click', () => {
-            this.remove(note.data.id);
-        });
-
-        let editBtn = document.createElement('button');
-        editBtn.classList.add('edit');
-        editBtn.innerText = 'Редактировать запись';
-        editBtn.addEventListener('click', () => {
-            content.contentEditable = true;
-        });
-
-        content.addEventListener('keydown', (event) => {
-            if (event.altKey && event.key === 'Enter'){
-                content.contentEditable = false;
-                let contentText = content.innerText;
-                note.edit({content: contentText});
+    conteiner.addEventListener('keydown', e => {
+        if (e.target.tagName === 'P'){
+            if (e.altKey && e.key === 'Enter'){
+                e.target.contentEditable = false;
             }
-        });
-
-        content.addEventListener('click', () => {
-            if(content.contentEditable !== 'true'){
-                content.classList.toggle('complite');
-                note.edit({complite: !note.data.complite});
-            }
-        });
-
-        noteItem.append(title, content, removeBtn, editBtn);
-        return noteItem
-    }
-
-    this.remove = function(id){
-        this.notes = this.notes.filter(item => item.data.id !== id);
-        this.render();
-    }
-
-    this.clear = function(){
-        this.notes = [];
-        this.render();
-    }
+        }
+    });
 }
 
-const notes = new NotesController().init();
+function createToDo(text){
+    let elemToDo = document.createElement('div');
+    elemToDo.classList.add('todo-container');
+    
+    let title = document.createElement('p');
+    title.innerText = text;
+
+    let delBtn = document.createElement('button');
+    delBtn.classList.add('del-todo');
+
+    delBtn.innerText = 'Удалить заметку';
+
+    let editBtn = document.createElement('button');
+    editBtn.classList.add('edit-todo');
+    editBtn.innerText = 'Редактировать заметку';
+
+    elemToDo.append(title, delBtn, editBtn);
+
+    return elemToDo;
+}
+
+init();
+
+// Array.prototype.delLastItem = function(){
+//     this.pop();
+// }
+
+// Number.prototype.adder = function(num){
+//     console.log(this);
+//     return this + num;
+// }

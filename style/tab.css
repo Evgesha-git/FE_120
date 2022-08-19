@@ -1,0 +1,50 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    padding: 20px;
+}
+
+.tabs-container{
+    background: beige;
+}
+
+ul{
+    list-style: none;
+}
+
+.tabs-container .tabs{
+    display: flex;
+    background: azure;
+}
+
+.tabs-container .tabs li{
+    border-bottom: 2px solid #363;
+    padding: 20px;
+}
+
+.tabs-container .tabs li:hover{
+    background: #363;
+    color: #fff;
+    cursor: pointer;
+}
+
+.tabs-container .tabs li.active{
+    background: #363;
+    color: #fff;
+}
+
+.tabs-container .tab-content li{
+    display: none;
+}
+
+.tabs-container .tab-content li.active{
+    display: block;
+}
+
+.tooltip{
+    color: rgb(163, 116, 217);
+    text-decoration:double;
+}
