@@ -48,3 +48,7 @@ ul{
     color: rgb(163, 116, 217);
     text-decoration:double;
 }
+
+.content{
+    position: relative;
+}

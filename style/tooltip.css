@@ -1,0 +1,10 @@
+.tooltip-element{
+    position: absolute;
+    background: rgba(255, 255, 0, 0.8);
+    width: 150px;
+    top: 0;
+    left: 0;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+}

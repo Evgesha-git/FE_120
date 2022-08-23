@@ -1,3 +1,6 @@
+if (popup) popup();
+
+
 const tabs = (selector) => {
     const tabContainer = document.querySelector(selector);
 
@@ -30,6 +33,10 @@ const tooltip = () => {
         item.addEventListener('mouseenter', e => {
             createtooltip(e);
         });
+        item.addEventListener('mouseleave', e => {
+            let tooltipElem = document.querySelector('.tooltip-element');
+            tooltipElem.remove();
+        });
     });
 
     function createtooltip(e){
@@ -37,7 +44,24 @@ const tooltip = () => {
         elem.classList.add('tooltip-element');
         elem.innerText = e.target.title;
 
-        document.body.append(elem);
+        e.target.parentNode.append(elem);
+
+        let x = e.target.offsetLeft - 10;
+        let y = e.target.offsetTop;
+        let w = e.target.offsetWidth + 30;
+
+        elem.style.width = w + 'px';
+
+        console.log(elem.offsetHeight)
+
+        if (elem.offsetHeight + 18 > e.clientY){
+            y += e.target.offsetHeight + 6;
+        }else{
+            y -= e.target.offsetHeight + elem.offsetHeight - 18;
+        }
+
+        elem.style.top = y + 'px';
+        elem.style.left = x + 'px';
     }
 }
 
