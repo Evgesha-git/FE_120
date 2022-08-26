@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>tabs</title>
+    <link rel="stylesheet" href="./style/tabs.css">
+    <link rel="stylesheet" href="./style/toltips.css">
 </head>
 <body>
-    <h1>JavaScriptcw 10</h1>
-    <div class="container">
-        <form action="" id="form">
-            <input type="text" name="title" id="title">
-            <button type="submit" class="btn">Создать задача</button>
-        </form>
-        <div class="todoList"></div>
-        <button id="clear">Отчистить список</button>
+    <div class="tabs-container">
+        <ul class="tabs-buttons">
+            <li class="active">tab 1</li>
+            <li>tab 2</li>
+            <li>tab 3</li>
+            <li class="add">+</li>
+        </ul>
+        <ul class="tabs-content">
+            <li class="active">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum vel ad corporis <span class="toltip_link" title="https://jqueryui.com/resources/demos/tooltip/default.html">ratione</span> totam eum voluptate minus maxime vero, atque perspiciatis, at eveniet quae error excepturi eos perferendis debitis blanditiis.</li>
+            <li>Quia nostrum aliquam voluptas eligendi ratione placeat? Soluta ipsam vero debitis ratione maxime cupiditate nesciunt quidem blanditiis, dignissimos ut hic placeat nostrum provident nisi dolorem. Fugit esse quo perspiciatis voluptas.</li>
+            <li>Expedita eum repudiandae et placeat optio corrupti odit, exercitationem itaque ipsa dignissimos veniam totam saepe mollitia, magni quod inventore dolor obcaecati. Excepturi quas quam quaerat architecto neque modi debitis eius?</li>
+        </ul>
     </div>
+    <script src="./script/tabs.js"></script>
+    <script src="./script/tolips.js"></script>
 </body>
-<script src="./script.js"></script>
 </html>

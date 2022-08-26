@@ -1,0 +1,38 @@
+.button{
+    background: gray;
+    padding: 10px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.button::before{
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;   
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+    position: absolute;
+    rotate: -45deg;
+    top: 40%;
+    left: 10px;
+    transition: .2s linear;
+}
+
+.button.active::before{
+    rotate: 135deg;
+}
+
+.content{
+    background: rgb(232, 232, 232);
+    overflow: hidden;
+    height: 0;
+    padding-left: 10px;
+    transition: .2s linear;
+}
+
+.content.active{
+    overflow: auto;
+    height: auto;
+    padding: 10px;
+}

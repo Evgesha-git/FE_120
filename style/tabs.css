@@ -1,0 +1,31 @@
+.tabs-container{
+    padding: 20px;
+    background: turquoise;
+}
+
+.tabs-container .tabs-buttons{
+    display: flex;
+    list-style: none;
+}
+
+.tabs-container .tabs-buttons li{
+    padding: 10px;
+    background: whitesmoke;
+    margin: 0 2px;
+}
+
+.tabs-container .tabs-buttons li:hover{
+    background: wheat;
+}
+
+.tabs-container .tabs-buttons li.active{
+    background: wheat;
+}
+
+.tabs-container .tabs-content li{
+    display: none;
+}
+
+.tabs-container .tabs-content li.active{
+    display: block;
+}
