@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.calculator{
+    margin: 0 auto;
+    max-width: 308px;
+    background: #303d3f;
+}
+
+.input{
+    height: 109px;
+
+}
+
+.input input{
+    height: 100%;
+    border: none;
+    width: 100%;
+    font-size: 50px;
+    line-height: 109px;
+    background: #303d3f;
+}
+
+.buttos{
+    width: 100%;
+    display: flex;
+}
+
+button{
+    width: 77px;
+    height: 77px;
+    text-align: center;
+    font-size: 44px;
+    border: none;
+    background: #303d3f;
+    color: #64787b;
+    text-align: center;
+}
+
+.main-buttons{
+    display: flex;
+    flex-direction: column;
+}
+
+.func{
+    display: grid;
+    grid-template-columns: repeat(3, 77px);
+}
+.func .f{
+    background: #39484a;
+    color: #708689;
+}
+
+.nums{
+    display: grid;
+    grid-template-columns: repeat(3, 77px);
+}
+
+.ziro{
+    grid-column: 1/3;
+    width: auto;
+}
+
+.func_buttons{
+    display: flex;
+    flex-direction: column;
+}
+
+.func_buttons .operation{
+    background: #6cd1e5;
+    color: #479bac;
+}
