@@ -1,150 +1,163 @@
 /**
- * Доработать:
- * множественный ввод операций подряд
- * решить проблему 0.1 и 0.2
+ * Note - описание одной заметки
+ * NoteController - логика работы всех заметок
+ * NoteUI - графиеское отображение
  */
 
-const calculator = {
-    displayValue: '0',
-    firsOperand: null,
-    waitingSecodOperand: false,
-    operator: null,
-};
+const Note = function(data){ //{!title!, content?}
+    if (data.title.length > 0) this.data = data;
+}
 
-const allCalculation = {
-    '+': (firsOperand, secondOperand) => firsOperand + secondOperand,
-    '-': (firsOperand, secondOperand) => firsOperand - secondOperand,
-    '/': (firsOperand, secondOperand) => firsOperand / secondOperand,
-    '*': (firsOperand, secondOperand) => firsOperand * secondOperand,
-    '%': (firsOperand, secondOperand) => firsOperand * (secondOperand / 100),
-    '=': (firsOperand, secondOperand) => secondOperand,
-    '+/-': (firsOperand, secondOperand) => secondOperand >= 0 ? -secondOperand : +secondOperand,
-};
+Note.prototype.edit = function(data){
+    Object.assign(this.data, data);
+    return this;
+}
 
-const handleOperator = (nextOperator) => {
-    const {
-        firsOperand,
-        displayValue,
-        operator,
-        waitingSecodOperand
-    } = calculator;
+const NoteController = function(){
+    this.notes = [];
+}
 
-    const inputValue = parseFloat(displayValue);
+NoteController.prototype.add = function(data){ //{!title!, content?}
+    if (!data.title) return;
+    let note = new Note(data);
+    let id = this.getRandomId();
+    note.data.id = id;
+    this.notes.push(note);
+    return this;
+}
 
-    if (operator && waitingSecodOperand) {
-        calculator.operator = nextOperator;
+NoteController.prototype.getRandomId = function(){
+    let id = Math.floor(Math.random() * 100);
+    if (this.notes.length === 0) return id;
+    let check = this.notes.every(note => note.data.id === id);
+    if (check){
+        return this.getRandomId();
+    }else{
+        return id;
     }
+}
 
-    if (firsOperand === null) { // 2 + 
-        calculator.firsOperand = inputValue;
-    } else if (operator) { //2 + 4 =
-        let result = 0;
-        const currentValue = firsOperand || 0;
-        if (operator === '/' && inputValue === '0') {
-            result = 'Деление на 0';
-        } else {
-            result = allCalculation[operator](currentValue, inputValue); // 2 + 4 = 6
+NoteController.prototype.removeNote = function (id){
+    this.notes = this.notes.filter(note => note.data.id !== id);
+    return this;
+}
+
+NoteController.prototype.editNote = function (id, data){
+    this.notes.forEach(note => {
+        if(note.data.id === id){
+            note.edit(data);
         }
+    });
+    return this;
+}
 
-        calculator.displayValue = result;
-        calculator.firsOperand = result;
-    }
+const NoteUI = function(){
+    NoteController.apply(this);
+    this.container = null;
+    this.noteContainer = null;
+}
 
-    if (nextOperator === '+/-') {
-        let result = 0;
-        result = allCalculation[nextOperator](0, inputValue);
-        calculator.displayValue = result;
-        calculator.firsOperand = result;
-        updateDisplay();
-    } else {
-        calculator.waitingSecodOperand = true; // 2 + || 2 + 4 =
-        calculator.operator = nextOperator;// 2 + || 2 +4 =
+NoteUI.prototype = Object.create(NoteController.prototype);
+
+NoteUI.prototype.init = function(selector){
+    this.container = this.search(selector);
+    let formContainer = this.createElement('div', [
+        ['class', 'form'],
+    ]);
+    let form = this.createElement('form');
+    let titleInput = this.createElement('input', [
+        ['type', 'text'],
+        ['placeholder', 'title']
+    ]);
+    let contentInput = this.createElement('input', [
+        ['type', 'text'],
+        ['placeholder', 'content']
+    ]);
+    let sendBtn = this.createElement('button', [
+        ['type', 'submit']
+    ], 'Add note');
+    this.noteContainer = this.createElement('div', [
+        ['class', 'notes']
+    ]);
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        this.add({
+            title: titleInput.value,
+            content: contentInput.value
+        });
+        titleInput.value = '';
+        contentInput.value = '';
+        this.render()
+    });
+
+    form.append(titleInput, contentInput, sendBtn);
+    formContainer.append(form);
+    this.container.append(formContainer, this.noteContainer);
+}
+
+NoteUI.prototype.search = function (selector){
+    return document.querySelector(selector);
+}
+
+NoteUI.prototype.createElement = function(tagName, attr = [], content){ //'', [[],[]], content?
+    let elem = document.createElement(tagName);
+    attr.forEach(atr => {
+        elem.setAttribute(atr[0], atr[1])
+    });
+    if (content) elem.innerHTML = content;
+    return elem;
+}
+
+NoteUI.prototype.render = function(){
+    this.noteContainer.innerHTML = '';
+    this.notes.forEach(note => {
+        let container = this.createElement('div', [
+            ['class', 'note']
+        ]);
+        let title = this.createElement('h2', [
+            ['class', 'title']
+        ], note.data.title);
+        let content = this.createElement('p', [
+            ['class', 'content']
+        ], note.data.content);
+        let editBtn = this.createElement('button', [
+            ['class', 'edit']
+        ], 'Edit');
+        let removeBtn = this.createElement('button', [
+            ['class', 'remove']
+        ], 'remove');
+
+        removeBtn.addEventListener('click', () => this.removeNote(note.data.id));
+
+        editBtn.addEventListener('click', () => {
+            title.contentEditable = true;
+            content.contentEditable =true;
+        });
+
+        title.addEventListener('keydown', e => this.saveEdit(e, title, content, note));
+        content.addEventListener('keydown', e => this.saveEdit(e, title, content, note));
+
+        container.append(title, content, editBtn, removeBtn);
+        this.noteContainer.append(container);
+    });
+}
+
+NoteUI.prototype.removeNote = function (id){
+    NoteController.prototype.removeNote.call(this, id);
+    this.render();
+}
+
+NoteUI.prototype.saveEdit = function (e, t, c, note){
+    if (e.altKey && e.code === 'Enter') {
+        t.contentEditable = false;
+        c.contentEditable = false;
+        note.edit({title: t.innerText, content: c.innerText});
     }
 }
 
-const inputOperand = (operand) => {
-    const {
-        displayValue,
-        waitingSecodOperand
-    } = calculator;
+let note = new NoteUI().init('.root');
 
-    if (waitingSecodOperand) {
-        calculator.displayValue = operand;
-        calculator.waitingSecodOperand = false;
-    } else {
-        calculator.displayValue = displayValue === '0' ? operand : displayValue + operand
-    }
-}
-
-const updateDisplay = () => {
-    const display = document.querySelector('.input').children[0];
-    display.value = calculator.displayValue;
-}
-
-const clear = () => {
-    calculator.displayValue = '0';
-    calculator.waitingSecodOperand = false;
-    calculator.firsOperand = null;
-    calculator.operator = null
-}
-
-const addDot = (value) => {
-    const {displayValue} = calculator;
-    let firs = displayValue.indexOf(value);
-
-    if (firs === -1) calculator.displayValue += value;
-    return;
-}
-
-let keys = document.querySelector('.buttos');
-keys.addEventListener('click', e => {
-    const { target } = e;
-
-    if (!target.matches('button')) return;
-
-    if (target.classList.contains('operation')) {
-        if (target.dataset.value !== 'C') {
-            handleOperator(target.dataset.value);
-            updateDisplay();
-            return;
-        } else {
-            clear();
-            updateDisplay();
-            return;
-        }
-    }
-
-    if (target.classList.contains('dot')){
-        addDot(target.dataset.value);
-        updateDisplay();
-        return;
-    }
-
-    inputOperand(target.dataset.value);
-    updateDisplay();
-});
-
-updateDisplay();
-
-
-//----------------------
-
-let elem = document.body;
-
-let button = elem.children[1].children[1].children[0].children[0].lastElementChild
-
-console.log(button.tagName)
-
-elem.prepend(button);
-
-
-elem.addEventListener('keydown', e => {
-    // console.log('X документа:' + e.pageX);
-    // console.log('Y документа:' + e.pageY);
-    // console.log('X окна:' + e.clientX);
-    // console.log('Y окна:' + e.clientY);
-    console.log(e.code);
-    console.log(e.key);
-    console.log(e.keyCode);
-
-})
+/**
+ * На дом - стилизовать приложение
+ */
