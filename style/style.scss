@@ -1,0 +1,27 @@
+.form{
+    width: 100%;
+    margin: 0 auto;
+
+    form{
+        display: flex;
+        flex-direction: column;
+        max-width: 500px;
+        width: 100%;
+        margin: 0 auto;
+
+        button{
+            width: 100%;
+            border: none;
+            color: beige;
+            color: #000;
+
+            &:hover{
+                background: bisque;
+            }
+        }
+    }
+}
+
+.notes{
+    display: flex;
+}
