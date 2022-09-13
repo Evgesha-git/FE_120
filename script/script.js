@@ -4,116 +4,9 @@
  * NoteUI - графиеское отображение
  */
 
-class Note {
-    constructor(data) {
-        if (data.title.length > 0) this._data = data;
-    }
+import NoteController from "./noteControlle.js";
+// import { f1 } from './async.js';
 
-    // edit(data){
-    //     Object.assign(this._data, data);
-    // }
-
-    get data() {
-        return this._data
-    }
-
-    set data(data) {
-        Object.assign(this._data, data);
-    }
-}
-
-let note = new Note({ title: 'fsdfsd' });
-
-
-
-class NoteController {
-    constructor() {
-        this.notes = [];
-        // this.localStorage = null;
-    }
-
-    add(data, newNote = true) {
-        if (!data.title) return;
-        let note = new Note(data);
-        if (newNote) {
-            let id = this.getRandom();
-            note.data = { id: id };
-        }
-        this.notes.push(note);
-    }
-
-    getRandom() {
-        let id = Math.floor(Math.random() * 100);
-        if (this.notes.length === 0) return id;
-        let chech = this.notes.every(note => note.data.id === id);
-        if (chech) {
-            return this.getRandom()
-        }
-        return id;
-    }
-
-    remove(id) {
-        this.notes = this.notes.filter(note => note.data.id !== id);
-        return this;
-    }
-
-    edit(id, data) {
-        this.notes.forEach(note => {
-            if (note.data.id === id) note.data = data;
-        });
-    }
-
-    get storage() {
-        return localStorage.getItem('notes');
-    }
-
-    set storage(notes) {
-        let notesBuffer = JSON.stringify(notes);
-        console.log(notesBuffer);
-        localStorage.setItem('notes', notesBuffer);
-    }
-
-    storageEpiration() {
-        if (!this.getCookie('note')) {
-            localStorage.removeItem('notes')
-        }
-
-        this.setCookie('note', 'note', { 'max-age': 50 });
-    }
-
-
-    getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
-
-    setCookie(name, value, options = {}) {
-
-        options = {
-            path: '/',
-            // при необходимости добавьте другие значения по умолчанию
-            ...options
-        };
-
-        if (options.expires instanceof Date) {
-            options.expires = options.expires.toUTCString();
-        }
-
-        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-        for (let optionKey in options) {
-            updatedCookie += "; " + optionKey;
-            let optionValue = options[optionKey];
-            if (optionValue !== true) {
-                updatedCookie += "=" + optionValue;
-            }
-        }
-
-        document.cookie = updatedCookie;
-    }
-}
 
 class NoteUI extends NoteController {
     constructor(selector) {
@@ -123,9 +16,19 @@ class NoteUI extends NoteController {
         this.init(selector);
     }
 
-    init(selector) {
+    async init(selector) {
         this.storageEpiration();
+
         this.container = document.querySelector(selector);
+        let h1 = document.createElement('h1');
+        h1.innerText = 'Loading...';
+
+        this.container.append(h1);
+
+        await this.getFetchData();
+
+        h1.remove();
+
         let formContainer = this.createElement('div', [
             ['class', 'form']
         ]);
@@ -157,11 +60,21 @@ class NoteUI extends NoteController {
             inputTitle.value = '';
             contentInput.value = '';
             this.render();
+
+            import('./async.js')
+                .then(module => {
+                    console.log(module);
+                    module.f1(4000).then(rez => console.log(rez));
+                });
         });
 
         form.append(inputTitle, contentInput, btn);
         formContainer.append(form);
         this.container.append(formContainer, this.noteContainer);
+
+        if (this.notes.length > 0){
+            this.render();
+        }
 
         if (!this.storage) return;
         if (this.storage.length > 0) {
@@ -173,6 +86,8 @@ class NoteUI extends NoteController {
             });
             this.render();
         }
+
+        
     }
 
     createElement(element, attribute = [], content) {
@@ -248,41 +163,41 @@ let noteUI = new NoteUI('.root');
 
 //Замыкания
 
-function makeCounter() {
-    let count = 0;
-    return function () {
-        return count++;
-    }
-}
+// function makeCounter() {
+//     let count = 0;
+//     return function () {
+//         return count++;
+//     }
+// }
 
-const counter1 = makeCounter();
-const counter2 = makeCounter();
-const counter3 = makeCounter();
+// const counter1 = makeCounter();
+// const counter2 = makeCounter();
+// const counter3 = makeCounter();
 
 
 // setTimeout(() => console.log('Hi'), 0);
 
-// for (let i = 0; i < 10; i++) {
-//     console.log(i)
+// for (var i = 0; i < 10; i++) {
+//     setTimeout(() => console.log(i), 0);
 // }
 
-let bublik = false;
+// let bublik = false;
 
-async function ff() {
-    let json = null
-    bublik = !bublik;
-    console.log(bublik);
-    let time = await fetch('https://jsonplaceholder.typicode.com/todos/1')
-
-
-
-    json = await time.json()
-
-    bublik = !bublik;
-    console.log(bublik);
+// async function ff() {
+//     let json = null
+//     bublik = !bublik;
+//     console.log(bublik);
+//     let time = await fetch('https://jsonplaceholder.typicode.com/todos/1')
 
 
-    console.log(json)
 
-    return json;
-}
+//     json = await time.json()
+
+//     bublik = !bublik;
+//     console.log(bublik);
+
+
+//     console.log(json)
+
+//     return json;
+// }
