@@ -1,11 +1,15 @@
-import createElement from "./createElement.js"
+class Footer{
+    constructor(){
+        this.elem = document.createElement('footer');
+        this.elem.classList.add('footer_component');
+        this.elem.innerHTML = `
+            <h2>Bla bla bla</h2>
+        `
+    }
 
-export function footer(){
-    const footerText = `<div>Footer</div>`;
-
-    const footer = createElement('footer', [
-        ['class', 'footer']
-    ], footerText);
-
-    return footer;
+    init(){
+        return this.elem;
+    }
 }
+
+export default new Footer().init();

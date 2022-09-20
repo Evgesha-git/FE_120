@@ -1,8 +1,4 @@
-import header from "./components/header.js";
-import { footer } from "./components/footer.js";
-import app from "./components/app.js";
+import App from "./components/App.js";
 
-const root = document.getElementById('root');
-
-root.append(header(), app(), footer());
+new App('#root').init();
 

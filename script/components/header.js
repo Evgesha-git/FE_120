@@ -1,17 +1,34 @@
-import createElement from "./createElement.js"
+class Header {
+    constructor() {
+        this.elem = document.createElement('header');
+        this.createElem();
+    }
 
-export default function header() {
-    const headerText = `<nav>
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#api">Api</a></li>
-        <li><a href="#about">About</a></li>
-    </ul>
-</nav>`
+    createElem() {
+        this.elem.setAttribute('class', 'header_component');
+        this.elem.innerHTML = `
+            <div class="logo">
+                <a href="\">
+                    <img src="https://via.placeholder.com/150x60" alt="">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="\">Home</a></li>
+                    <li><a href="#catalog">Catalog</a></li>
+                    <li><a href="#abaut">Abaut</a></li>
+                </ul>
+            </nav>
+            <div class="widget">
+                <span>Корзина</span>
+                <span>0</span>
+            </div>
+        `
+    }
 
-    const header = createElement('header', [
-        ['class', 'heaeder'],
-    ], headerText);
-
-    return header;
+    init(){
+        return this.elem
+    }
 }
+
+export default new Header().init();

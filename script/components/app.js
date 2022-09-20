@@ -1,20 +1,25 @@
-import createElement from "./createElement.js";
-import router from "./router.js";
+import Header from "./Header.js";
+import Footer from "./Footer.js";
+import Main from "./Main.js";
 
-export default function app() {
-    const main = createElement('main', [
-        ['class', 'main']
-    ]);
-    
-    window.addEventListener('load', render);
-
-    window.addEventListener('hashchange', render);
-
-    async function render(){
-        main.innerHTML = '';
-        let module = await router();
-        main.append(module());
+class App{
+    constructor(selector){
+        this.root = document.querySelector(selector);
+        this.elem = document.createElement('div');
+        this.elem.innerHTML = `
+        <h2>Header</h2>
+        <h2>Main</h2>
+        <h2>Footer</h2>
+        `
     }
-    
-    return main;
+
+    render(...elem){
+        elem.forEach(el => this.root.append(el));
+    }
+
+    init(){
+        this.render(Header, Main, Footer);
+    }
 }
+
+export default App;
