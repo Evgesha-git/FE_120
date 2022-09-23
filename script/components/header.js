@@ -1,3 +1,5 @@
+import { widget } from "./Card.js"
+
 class Header {
     constructor() {
         this.elem = document.createElement('header');
@@ -19,11 +21,8 @@ class Header {
                     <li><a href="#abaut">Abaut</a></li>
                 </ul>
             </nav>
-            <div class="widget">
-                <span>Корзина</span>
-                <span>0</span>
-            </div>
-        `
+        `;
+        this.elem.append(widget);
     }
 
     init(){

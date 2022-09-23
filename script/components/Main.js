@@ -10,12 +10,22 @@ class Main {
         let hash = location.hash.slice(1);
         if (!hash) hash = 'home';
 
-        import(`./${hash}.js`)
-            .then(module => {
-                this.main.innerHTML = '';
-                console.log(module.default);
-                this.main.append(module.default);
-            });
+        if (hash.indexOf('/') !== -1){
+            let index = hash.indexOf('/');
+            let id = hash.slice(index + 1);
+            import ('./ProductCard.js')
+                .then(module => {
+                    this.main.innerHTML = '';
+                    this.main.append(new module.default(id).init());
+                });
+        }else{
+            import(`./${hash}.js`)
+                .then(module => {
+                    this.main.innerHTML = '';
+                    console.log(module.default);
+                    this.main.append(module.default);
+                });
+        }
     }
 
     initConponent() {
