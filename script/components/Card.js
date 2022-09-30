@@ -1,14 +1,17 @@
+import { getCookie, setCookie } from "./api/cookes.js";
+
 class Card {
     constructor() {
         this.widget = document.createElement('div');
         this.widget.classList.add('card_widget');
-        this.card = [];
+        this.card = this.storage;
         this.totalPrice = 0;
         this.addCard = this.addCard.bind(this);
         this.cardContainer = document.createElement('div');
         this.cardContainer.classList.add('card_container');
         this.total = document.createElement('div');
         this.total.classList.add('total_price');
+        this.title = 'Card';
     }
 
 
@@ -33,11 +36,13 @@ class Card {
                     if (confirm('Вы действительно хотите удалить товар?')) {
                         this.card = this.card.filter(elem => elem.id !== item.id);
                         this.render();
+                        this.storage = this.card;
                     } else {
                         counter.value = 1;
                     }
                 } else {
                     item.count = counter.value;
+                    this.storage = this.card;
                     // Место для вызова финальной стоимости
                     this.#getTotalPrice();
                 }
@@ -69,6 +74,7 @@ class Card {
 
         let flag = this.card.some(data => data.id === obj.id);
         this.render();
+        this.storage = this.card;
         return flag;
     }
 
@@ -78,6 +84,20 @@ class Card {
             <span>${this.card.length}</span>
         `
         return this.widget;
+    }
+
+    get storage(){
+        if (!getCookie('card')){
+            localStorage.removeItem('card');
+            return [];
+        }
+        if (!localStorage.getItem('card')) return [];
+        return JSON.parse(localStorage.getItem('card'));
+    }
+
+    set storage(card){
+        localStorage.setItem('card', JSON.stringify(card));
+        setCookie('card', 'Можно что угодно', 10)
     }
 
     init(){
@@ -90,6 +110,7 @@ let card = new Card();
 let widget = card.cardWidget();
 let addCard = card.addCard;
 let def = card.init();
+let title = card.title;
 
 export default def;
-export { widget, addCard };
+export { widget, addCard, title };

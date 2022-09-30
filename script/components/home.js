@@ -1,13 +1,19 @@
-class Home{
-    constructor(){
+class Home {
+    constructor() {
         this.elem = document.createElement('div');
         this.elem.classList.add('home');
-        this.elem.innerHTML = `<h2>Home</h2>`
+        this.elem.innerHTML = `<h2>Home</h2>`;
+        this.title = 'Home';
     }
 
-    init(){
+    init() {
         return this.elem
     }
 }
 
-export default new Home().init();
+let home = new Home();
+let init = home.init();
+let title = home.title;
+
+export default init;
+export { title }

@@ -1,3 +1,5 @@
+import preloader from "./modules/preloader.js";
+
 class Main {
     constructor() {
         this.main = document.createElement('main');
@@ -14,16 +16,23 @@ class Main {
             let index = hash.indexOf('/');
             let id = hash.slice(index + 1);
             import ('./ProductCard.js')
-                .then(module => {
+                .then(async module => {
                     this.main.innerHTML = '';
-                    this.main.append(new module.default(id).init());
+                    this.main.append(preloader);
+                    let product = new module.default(id);
+                    let init = await product.init();
+                    let title = product.title;
+                    preloader.remove();
+                    this.main.append(init);
+                    document.title = title;
                 });
         }else{
             import(`./${hash}.js`)
                 .then(module => {
                     this.main.innerHTML = '';
-                    console.log(module.default);
+                    console.log(module);
                     this.main.append(module.default);
+                    document.title = module.title;
                 });
         }
     }

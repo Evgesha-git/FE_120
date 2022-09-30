@@ -1,4 +1,6 @@
-import { catalogGetData } from "./api/catalogApi.js"
+import { getData } from "./api/catalogApi.js";
+import preloader from "./modules/preloader.js";
+
 
 class Catalog {
     constructor() {
@@ -15,11 +17,13 @@ class Catalog {
         this.cardData = [];
         this.page = 1;
         this.pagination();
+        this.title = 'Catalog';
     }
 
     async pagination() {
-        let response = await catalogGetData();
-        this.data = await response.json();
+        this.cardContainer.append(preloader);
+
+        this.data = await getData();
 
         let contentPerPage = 8;
         let count = this.data.length;
@@ -157,4 +161,9 @@ class Catalog {
     }
 }
 
-export default new Catalog().init();
+let catalog = new Catalog();
+let init = catalog.init()
+let title = catalog.title;
+
+export default init;
+export { title }
