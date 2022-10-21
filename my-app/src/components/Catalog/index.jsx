@@ -26,6 +26,7 @@ const Catalog = () => {
                         id={item.id}
                         image={item.image}
                         title={item.title}
+                        price={item.price}
                     />
                 )
             })}

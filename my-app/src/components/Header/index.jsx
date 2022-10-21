@@ -1,7 +1,11 @@
+import { createContext } from "react";
 import { Link, Outlet } from "react-router-dom"
 import Widget from "../widget"
+import "./style.css";
+
 
 const Header = () => {
+
     return (
         <>
             <header className="header">
