@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../../App";
+import Button from "../Button";
 
 const Product = () => {
+    const { cart, setCart } = useContext(CartContext);
     const [product, setProduct] = useState({});
     const [load, setLoad] = useState(false);
     let { productId } = useParams();
@@ -13,6 +16,18 @@ const Product = () => {
         let data = await resp.json();
         setProduct(data);
         setLoad(!load);
+    }
+
+    const addCart = () => {
+        let data = {
+            title: product.title,
+            price: product.price,
+            id: product.id,
+            image: product.image,
+            count: 1
+        };
+        
+        setCart([...cart, data]);
     }
 
     useEffect(() => {
@@ -32,6 +47,7 @@ const Product = () => {
                         <span>{product.rating.rate}</span>
                         <span>{product.price}</span>
                     </div>
+                    <Button data={product} onAddCart={addCart}/>
                 </> :
                 <p>Loading...</p>
             }

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../../App";
+import Button from "../../Button";
 import './style.css';
 
 const ProductItem = (props) => {
@@ -28,7 +29,8 @@ const ProductItem = (props) => {
             </div>
             <Link to={`${id}`}><h2>{title}</h2></Link>
             <p>{price}</p>
-            <button onClick={addCart}>Add cart</button>
+            {/* <button onClick={addCart}>Add cart</button> */}
+            <Button data={props} onAddCart={addCart}/>
         </div>
     );
 }
