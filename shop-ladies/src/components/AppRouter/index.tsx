@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router";
 import React from "react";
-import Admin from "../Admin/imdex";
+import Admin from "../Admin";
 import Shop from "../Shop";
 
 const AppRouter: React.FC = () => {

@@ -7,12 +7,15 @@ export interface AdminState {
   admin: IAdmin;
   loading: boolean;
   error: string | null;
+  login: boolean,
+  message: string,
 }
 
 export enum AdminActionTypes {
   FETCH_ADMIN = "FETCH_ADMIN",
   FETCH_ADMIN_SUCCESS = "FETCH_ADMIN_SUCCESS",
   FETCH_ADMIN_ERROR = "FETCH_ADMIN_ERROR",
+  DEFAULT = "DEFAULT",
 }
 
 interface FetchAdminAction {
@@ -29,7 +32,13 @@ interface FetchAdminErrorAction {
   payload: string;
 }
 
+interface DefaultAction {
+  type: AdminActionTypes.DEFAULT,
+  payload: string
+}
+
 export type AdminAction =
   | FetchAdminAction
   | FetchAdminSuccessAction
-  | FetchAdminErrorAction;
+  | FetchAdminErrorAction
+  | DefaultAction;
