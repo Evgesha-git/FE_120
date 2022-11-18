@@ -1,9 +1,7 @@
 import { AdminAction, AdminActionTypes } from "../../types/admin";
 import { Dispatch } from "redux";
 import { ref, child, get, set } from "firebase/database";
-import {useAuthState} from "react-firebase-hooks/auth"
-import { useContext } from "react";
-import { auth, Context, database } from "../../";
+import { database } from "../../";
 
 export const loginAdmin = (uId: string) => {
   return async (dispatch: Dispatch<AdminAction>) => {
