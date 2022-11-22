@@ -1,9 +1,13 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useAction } from "../../../hooks/useAction";
 
 const AdminPage: React.FC = () => {
+    const { logOutAuth } = useAction()
+
     return (
         <main>
+            <button onClick={() => logOutAuth()}>Log out</button>
             <nav>
                 <ul>
                     <li>

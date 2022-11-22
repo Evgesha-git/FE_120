@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { adminTypeSelector } from "../../hooks/adminTypeSelector";
+import { useTypeSelector } from "../../hooks/useTypeSelector";
 import { useAction } from "../../hooks/useAction";
 import { useAdmin } from "../../hooks/useAdmin";
 
 const Test: React.FC = () => {
-    const { admin, login } = adminTypeSelector(state => state.admin);
+    const { admin, login } = useTypeSelector(state => state.admin);
     const redirect = useAdmin(login);
     const { loginAdmin } = useAction()
 

@@ -3,6 +3,13 @@ interface IAdmin {
   name: string;
 }
 
+interface IUser {
+  id: string,
+  name: string,
+  cart: Array<string>,
+  isAdmin: boolean,
+}
+
 export interface AdminState {
   admin: IAdmin;
   loading: boolean;

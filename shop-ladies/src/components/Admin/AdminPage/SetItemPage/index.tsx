@@ -28,10 +28,6 @@ const SetItemPage: React.FC = () => {
         (data: any, item: any) => ({ ...data, [item.name]: item.value }),
         {}
       );
-    //   const names = files.reduce(
-    //     (data, item, i) => ({ ...data, [i]: item?.name }),
-    //     {}
-    //   );
       const names = files.map((item) => item?.name);
       data = {
         ...data,
@@ -42,6 +38,9 @@ const SetItemPage: React.FC = () => {
       set(newProductRef, {
         ...data,
       });
+      setFiles([]);
+      setInputFiles(1);
+      items.forEach(item => item.value = '');
     }
   };
 

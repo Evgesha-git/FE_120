@@ -7,7 +7,7 @@ import { store } from "./store";
 import { app } from "./utils/db";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage"
+import { getStorage } from "firebase/storage";
 
 export const Context = createContext<any>(null);
 
@@ -21,9 +21,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Context.Provider value={{database, auth}}>
-        <App />
-      </Context.Provider>
+      <App />
     </Provider>
   </React.StrictMode>
 );

@@ -1,31 +1,32 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { useAction } from "../../hooks/useAction";
-import { adminTypeSelector } from "../../hooks/adminTypeSelector";
+import { useTypeSelector } from "../../hooks/useTypeSelector";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { Context, database } from "../..";
+import { database } from "../..";
 import { ref, set } from "firebase/database";
 import { Link } from "react-router-dom";
 import AdminPage from "./AdminPage";
 import { useAdmin } from "../../hooks/useAdmin";
 
 const Admin: React.FC = () => {
-  const { auth } = useContext(Context);
-  const { loginAdmin, addAdmin } = useAction();
-  const { admin, loading, error, login, message } = adminTypeSelector(
+  const { loginAdmin, addAdmin, loginAuth, logOutAuth } = useAction();
+  const { admin, loading, error, login, message } = useTypeSelector(
     (state) => state.admin
   );
+  const {user, loading: loadAuth, error: errorAuth} = useTypeSelector((state) => state.auth);
   const input = useRef<HTMLInputElement | null>(null);
   const redirect = useAdmin(login)
 
   const loginHandler = async () => {
-    const provider = new GoogleAuthProvider();
-    const { user } = await signInWithPopup(auth, provider);
+    // const provider = new GoogleAuthProvider();
+    // const { user } = await signInWithPopup(auth, provider);
     // console.log(user);
     // set(ref(database, "admin/" + user?.uid), {
     //   name: user?.displayName,
     //   photoUrl: user?.photoURL,
     // });
     // add new admin
+    loginAuth()
     console.log(input.current?.checked);
 
     if (input.current?.checked) {
@@ -34,8 +35,12 @@ const Admin: React.FC = () => {
       sessionStorage.setItem('admin', JSON.stringify({ id: user?.uid }));
     }
 
-    loginAdmin(user?.uid);
+    // loginAdmin(user?.uid);
   };
+
+  useEffect(() => {
+    loginAdmin(user?.uid);
+  }, [user]);
 
   return login ? (
     <div>

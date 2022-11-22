@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { ref, child, get, set } from "firebase/database";
 import { database } from "../../";
 
-export const loginAdmin = (uId: string) => {
+export const loginAdmin = (uId: string | undefined) => {
   return async (dispatch: Dispatch<AdminAction>) => {
     try {
       dispatch({ type: AdminActionTypes.FETCH_ADMIN });
