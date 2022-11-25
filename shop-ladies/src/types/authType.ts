@@ -1,5 +1,4 @@
 import { User } from "firebase/auth";
-import { type } from "os";
 
 export interface IAuth {
   user: User | null;
